@@ -1,0 +1,20 @@
+{
+    "files.associations": {
+        "pthread.h": "c",
+        "constant_set.c": "cpp",
+        "stddef.h": "c",
+        "string.h": "c",
+        "stdlib.h": "c",
+        "process.c": "cpp",
+        "unistd.h": "c",
+        "calc_memory_util.c": "cpp",
+        "request_queue.c": "cpp",
+        "request_body.c": "cpp",
+        "utility.c": "cpp",
+        "SSTF.C": "cpp",
+        "schedule.c": "cpp",
+        "disk.h": "c",
+        "fuse.h": "c"
+    },
+    "C_Cpp.errorSquiggles": "Enabled"
+}
