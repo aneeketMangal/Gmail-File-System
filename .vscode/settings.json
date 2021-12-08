@@ -14,7 +14,8 @@
         "SSTF.C": "cpp",
         "schedule.c": "cpp",
         "disk.h": "c",
-        "fuse.h": "c"
+        "fuse.h": "c",
+        "errno.h": "c"
     },
     "C_Cpp.errorSquiggles": "Enabled"
 }
