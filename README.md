@@ -1,67 +1,58 @@
+<center><h1>Gmail FS</h1></center>
 
-# CS303 Assignment 5
-Submitter name: Aneeket Mangal\
-Roll No.: 2019CSB1071\
-Course:  CS303
+This program is based on FUSE system that enables to use email account as a disk. Few details:
+* File name is the subject of the email.
+* Body corresponds to the body content itself.
+* Only non-binary data is present in the file.
+* Commands like ls, cd, mkdir, cat, rm, rmdir etc would work as expected.
 
-## 1. What does this program do
-* This C program simulates the read, write and seek operations of a disk. It can be observed using 5 different scheduling policies:
-    * Random
-    * FIFO
-    * SSTF
-    * SCAN
-    * C-SCAN
+## Description
+* This program mounts a local library to a email server, here in this program's case, the server is IMAP.
+* To change and modify the functions, libfuse library has been used.
+* A libfuse based filesystem has been created, and following functions have been implemented
+    * gmailFS_mkdir: the corresponding function which is called when mkdir function is called.
+    * gmailFS_getattr: This function is used to get the attributes of a file/directory(permissons, maximum size, choice if if the entity is file or a directory).
+    * gmailFS_rmdir: removes a directory.
+    * gmailFS_unlink: removes a file.
+    * gmailFS_read: This function read the content of files
+    * gmailFS_readdir: This function 
+    * gmailFS_mknod: This functions creates a new file(corresponding to a new email).
+    * gmailFS_write: This function writes to the file, to the corresponding email
 
-A certain amount of random requests are generated which are then sent to the disk scheduler which appropriately orders them and sends them to the disk for service by calling its read, write and seek functions.
-
-Finally the values are used to calculate scheduling algorithm's throughput, response time (sum, min, max, average, variance and standard deviation)
-
-* There are following constants during the execution of the program
-    * Rational speed of the disk, r revolutions per minute.
-    * Average seek time Ts in ms.
-    * Sector size, N in bytes.
-    * number of cylinders on the disk
-    * number of sectors of the disk.
-
-## 2. A description of how this program works 
-* First a certain amount of random requests are generated.
-* Each random request consists of address (<platter, cylinder, sector>) and number of requested blocks.
-* All these requests are sent to the disk scheduler which appropriately orders them according the scheduling policies used.
-* Finally throughput and response times are calculated and given out as output.
-***ASSUMPTIONS***
-* At max 20 sectors can be requested in a request.
-* All requests are generated at once and sent to dispatcher.
+* The corresponding functions for recieving/sending data 
+from the IMAP server, have been implemented using libcurl.
+These functions can be found in the curl folder in source
  
+* Various functionalities of libcurl have been used:
+    * fetching email body from the server
+    * fetching files from the server
+    * sending email
+    * checking if a path is valid
+    * list of directories present
+    * delete folder
+    * delete files
+* IMAP responses are in a fixed format, which are not convenient to parse into program, so there is a lot of string processing involved. For this some string.h library along with some manually created functions have been used.
+The implementation of the string helper functions can be found in the string folder.
+* The implementation is based on the following format, a extra label has been created which is the root label, the entire filesystem is inside this label.
+* This label's name is filesystem
 
-## 3. How to compile and run this program
+## Instructions to compile & run
+* INSTALL following in the system:
+    * Libfuse
+    * Libcurl
+    * pkg-config
+
+* The given program is meant espacially for the gmail, all the testing etc. have been done using that.
+* "Compulsory:" Create a label filesystem on your gmail.
+* Decide a mount folder, and it should be inside /home/user directory
+* Run "fusermount -u directory"
 * Navigate to ```source``` directory inside main directory.
-* Compile using ```gcc main.c -o main -lm```.
-* Run the program using ```./main [rotational speed]  [sector size] [average seek time] [scheduling algorithm]```.
-* A sample example would be ```./main 15000 512 4 1```
-* To run various scheduling algorithm, we have:
-    * 1 -> Random
-    * 2 -> FIFO
-    * 3 -> SSFT
-    * 4 -> SCAN
-    * 5 -> CSCAN 
-
-
----
-
-**ANALYSIS AND OBSERVATIONS**
-* Observation table is present in ```documentation``` folder (output.png and output.pdf).
-* The set of request can be found in request_set.txt. The format for the request is:
-```platter cylinder sector sector_count```
-* There are 1000 requests.
-* From the data we can observe that:
-    * Random ≈ FIFO < SSTF ≈ SCAN ≈ CSCAN (Throughput)
-* The three algorithms scan, cscan, sstf have similar throughput because they will server request in almost identical order due to the random nature of request. Due to which the request would be uniform and hence they scheduling policies would work in a similar way.
-* Also SCAN, CSCAN, SSTF are better than FIFO because they handle request with closer track, hence saving seek time.
-* From the data we can observe that:
-    * Random ≈ FIFO > SSTF ≈ SCAN ≈ CSCAN (Average Response time)
-* SCAN & C-SCAN would behave similarly due to uniform nature of the input data.
-* <b>Observation table</b>
-![1](documentation/output.png)
-## 4. Provide a snapshot of a sample run
-![2](documentation/run.png)
+* To edit config file (config.h),  edit the defined macros. **Compuslory**
+* Enter the complete email and not just the username.
+* Ensure that the credentials are correct
+* Since the data is being fetched from a remote server via internet, the responses would slow and take time.
+* The default IMAP server URL is already present in the file.
+* Compile using ```gcc -Wall main.c `pkg-config fuse3 --cflags --libs` -lcurl -o main```.
+* Run using  ```./main -f <mount directory> <config file directory>```
+* Then you can run the ls cd etc commands on a separate terminal once you have located to the mount point 
 
