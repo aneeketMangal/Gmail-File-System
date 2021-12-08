@@ -10,6 +10,7 @@
 #include <curl/curl.h>
 #include <ctype.h>
 #include "config.h"
+#include "const.h"
 #include "string/string.h"
 #include "curl/curl_.h"
 

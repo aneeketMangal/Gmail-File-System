@@ -46,7 +46,6 @@ The implementation of the string helper functions can be found in the string fol
 * "Compulsory:" Create a label filesystem on your gmail.
 * Decide a mount folder, and it should be inside /home/user directory
 * Run "fusermount -u directory"
-* Navigate to ```source``` directory inside main directory.
 * To edit config file (config.h),  edit the defined macros. **Compuslory**
 * Enter the complete email and not just the username.
 * Ensure that the credentials are correct
