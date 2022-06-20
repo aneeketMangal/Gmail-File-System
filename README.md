@@ -1,4 +1,4 @@
-<center><h1>Gmail FS</h1></center>
+<center><h1>GMAIL FS</h1></center>
 
 This program is based on FUSE system that enables to use email account as a disk. Few details:
 * File name is the subject of the email.
